@@ -1,1 +1,6 @@
-﻿
+﻿.bg-logo {
+    background-color: white;
+    border-bottom: black;
+    border-bottom-style: solid;
+
+}
