@@ -14,9 +14,10 @@
     <title>@ViewBag.Title - Ocean</title>
 </head>
 <body>
-    <div class="col-sm-12">
+    <div class="col-sm-12 bg-primary">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">Ocean</a>
+            <img class="mb-2" src="~/images/Logo/icons8-water-element-96.png" alt="" width="40" height="40">
+            <div class="navbar-brand text-light ml-2"><h3>Ocean</h3></div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Videos</a>
@@ -36,28 +37,36 @@
                         <a class="nav-link" href="#">My List</a>
                     </li>
                 </ul>
-
-                <div class="nav-item dropdown my-2 my-lg-0">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                        <img src="~/images/Profile/icons8-anonymous-mask-filled-32.png" class="bg-logo" />
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Manage profiles</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My account</a>
-                        <a class="dropdown-item" href="#">Log out</a>
+                
+                @if (User.IsInRole("User"))
+                {
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                            <img src="~/images/Profile/icons8-anonymous-mask-filled-32.png" class="bg-logo" />
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Manage profiles</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">My account</a>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">Log out</a>
+                        </div>
                     </div>
-                </div>
+                }
+               else
+                {
+                    <div class="text-light mr-2">
+                        <a class="text-light" asp-controller="Account" asp-action="Login">Login</a>
+                    </div>
+                }
 
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+                <form class="form-inline">
+                    <input class="form-control" type="search" placeholder="Search">
+                    <button class="btn btn-secondary" type="submit">Search</button>
                 </form>
-
             </div>
         </nav>
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12 bg-light">
         @RenderBody()
     </div>
 

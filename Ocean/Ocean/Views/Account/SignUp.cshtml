@@ -1,0 +1,49 @@
+﻿@model Ocean.ViewModels.SignUpViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "~/Views/Shared/_SignUp.cshtml";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-sm-2 col-lg-3">
+        <div class="card border-light mb-2">
+            <div class="card-header bg-light">
+                <img src="~/images/Logo/icons8-water-element-96.png" alt="" width="72" height="72">
+                <div class="display-4 text-dark">Ocean</div>
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">- Sign Up -</h2>
+                <form class="form-signin text-left" asp-action="SignUp" method="post">
+                    <div class="mb-2">
+                        <label asp-for="Login">Name</label>
+                        <input type="text" asp-for="Login" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-2">
+                        <label asp-for="Password">Password</label>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="mb-2">
+                        <label asp-for="ConfirmPassword">Password</label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                    </div>
+                    <div class="mb-2">
+                        <label asp-for="Email">Email</label>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="Email address">
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="ProfilePicture">Profile Picture</label>
+                        <input type="file" asp-for="ProfilePicture" class="form-control-file">
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-info btn-block" type="submit"><h4>Sign Up</h4></button>
+                    </div>
+                </form>
+                <div class="text-center">
+                    Already registered? <a asp-action="Login" class="link">Log In</a>
+                    <p class="mt-5 mb-3 text-muted text-center">&copy; @DateTime.Now.Year Ocean</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
