@@ -37,12 +37,12 @@
                         <a class="nav-link" href="#">My List</a>
                     </li>
                 </ul>
-                
+
                 @if (User.IsInRole("User"))
                 {
                     <div class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                            <img src="~/images/Profile/icons8-anonymous-mask-filled-32.png" class="bg-logo" />
+                            <img src="~/images/Profile/icons8-anonymous-mask-48.png" class="bg-logo" />
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#">Manage profiles</a>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 }
-               else
+                else
                 {
                     <div class="text-light mr-2">
                         <a class="text-light" asp-controller="Account" asp-action="Login">Login</a>

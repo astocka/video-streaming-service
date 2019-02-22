@@ -25,15 +25,6 @@ namespace Ocean.Controllers
             Context = context;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUserRole()
-        {
-            var role = new IdentityRole<int> { Name = "User" };
-            await RoleManager.CreateAsync(role);
-            return Content("Role [User] added successfully!");
-        }
-
         [HttpGet]
         public IActionResult SignUp()
         {
@@ -49,13 +40,22 @@ namespace Ocean.Controllers
                 {
                     Email = signUpViewModel.Email,
                     UserName = signUpViewModel.Login,
-                    ProfilePicture = signUpViewModel.ProfilePicture
+                    MyProfiles = new List<UserProfile>
+                    {
+                        new UserProfile()
+                        {
+                            Name = signUpViewModel.Login,
+                            AppUserId = 1,
+                            ProfilePictureId = 1
+                        } 
+                    }
                 };
                 var result = await UserManager.CreateAsync(user, signUpViewModel.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.PasswordSignInAsync(signUpViewModel.Email, signUpViewModel.Password, true,
                         false);
+
                     await UserManager.AddToRoleAsync(user, "User");
                     return RedirectToAction("Index", "Home");
                 }

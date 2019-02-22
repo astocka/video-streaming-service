@@ -156,8 +156,6 @@ namespace Ocean.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("ProfilePicture");
-
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -176,6 +174,43 @@ namespace Ocean.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Ocean.Models.ProfilePicture", b =>
+                {
+                    b.Property<int>("ProfilePictureId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FilePath")
+                        .IsRequired();
+
+                    b.Property<string>("ThumbnailFilePath")
+                        .IsRequired();
+
+                    b.HasKey("ProfilePictureId");
+
+                    b.ToTable("ProfilePictures");
+                });
+
+            modelBuilder.Entity("Ocean.Models.UserProfile", b =>
+                {
+                    b.Property<int>("UserProfileId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AppUserId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("ProfilePictureId");
+
+                    b.HasKey("UserProfileId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ProfilePictureId");
+
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -220,6 +255,19 @@ namespace Ocean.Migrations
                     b.HasOne("Ocean.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.UserProfile", b =>
+                {
+                    b.HasOne("Ocean.Models.AppUser", "AppUser")
+                        .WithMany("MyProfiles")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.ProfilePicture", "ProfilePicture")
+                        .WithMany("UserProfiles")
+                        .HasForeignKey("ProfilePictureId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

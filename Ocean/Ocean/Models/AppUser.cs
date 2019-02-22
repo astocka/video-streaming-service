@@ -8,11 +8,10 @@ namespace Ocean.Models
 {
     public class AppUser : IdentityUser<int>
     {
-        public string ProfilePicture { get; set; }
+        public List<UserProfile> MyProfiles { get; set; }
 
         public AppUser(string userName) : base(userName)
         {
-
         }
 
         public AppUser()

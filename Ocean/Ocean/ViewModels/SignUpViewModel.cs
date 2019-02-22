@@ -19,8 +19,5 @@ namespace Ocean.ViewModels
         [Compare("Password")]
         [DisplayName("Confirm Password")]
         public string ConfirmPassword { get; set; }
-        [DisplayName("Profile Picture")]
-        public string ProfilePicture { get; set; }
-
     }
 }
