@@ -125,6 +125,40 @@ namespace Ocean.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Ocean.Models.Actor", b =>
+                {
+                    b.Property<int>("ActorId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("LastName")
+                        .IsRequired();
+
+                    b.HasKey("ActorId");
+
+                    b.ToTable("Actors");
+                });
+
+            modelBuilder.Entity("Ocean.Models.ActorVideo", b =>
+                {
+                    b.Property<int>("ActorVideoId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ActorId");
+
+                    b.Property<int>("VideoId");
+
+                    b.HasKey("ActorVideoId");
+
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("ActorVideos");
+                });
+
             modelBuilder.Entity("Ocean.Models.AppUser", b =>
                 {
                     b.Property<int>("Id")
@@ -176,6 +210,37 @@ namespace Ocean.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Ocean.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Ocean.Models.CategoryVideo", b =>
+                {
+                    b.Property<int>("CategoryVideoId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("VideoId");
+
+                    b.HasKey("CategoryVideoId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("CategoryVideos");
+                });
+
             modelBuilder.Entity("Ocean.Models.ProfilePicture", b =>
                 {
                     b.Property<int>("ProfilePictureId")
@@ -211,6 +276,29 @@ namespace Ocean.Migrations
                     b.HasIndex("ProfilePictureId");
 
                     b.ToTable("UserProfiles");
+                });
+
+            modelBuilder.Entity("Ocean.Models.Video", b =>
+                {
+                    b.Property<int>("VideoId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateAdded");
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<string>("VideoPath")
+                        .IsRequired();
+
+                    b.Property<int>("YearReleased");
+
+                    b.HasKey("VideoId");
+
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -255,6 +343,32 @@ namespace Ocean.Migrations
                     b.HasOne("Ocean.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.ActorVideo", b =>
+                {
+                    b.HasOne("Ocean.Models.Actor", "Actors")
+                        .WithMany("ActorVideo")
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Videos")
+                        .WithMany("ActorVideo")
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.CategoryVideo", b =>
+                {
+                    b.HasOne("Ocean.Models.Category", "Category")
+                        .WithMany("CategoryVideo")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Video")
+                        .WithMany("CategoryVideo")
+                        .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

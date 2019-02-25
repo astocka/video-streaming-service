@@ -19,5 +19,10 @@ namespace Ocean.Context
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<ProfilePicture> ProfilePictures { get; set; }
+        public DbSet<Video> Videos { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<CategoryVideo> CategoryVideos { get; set; }
+        public DbSet<Actor> Actors { get; set; }
+        public DbSet<ActorVideo> ActorVideos { get; set; }
     }
 }
