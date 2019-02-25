@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Ocean.Context;
 using Ocean.Models;
 using Ocean.ViewModels;
@@ -57,7 +59,7 @@ namespace Ocean.Controllers
                         false);
 
                     await UserManager.AddToRoleAsync(user, "User");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MyAccount", "Account");
                 }
 
                 foreach (var error in result.Errors)
@@ -83,7 +85,7 @@ namespace Ocean.Controllers
                     loginViewModel.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MyAccount", "Account");
                 }
                 else
                 {
@@ -98,6 +100,61 @@ namespace Ocean.Controllers
         {
             await SignInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ManageProfiles()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> MyAccount()
+        {
+            var user = await UserManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                var profile = await Context.UserProfiles.FirstOrDefaultAsync(x => x.AppUserId == user.Id);
+                var pic = await Context.UserProfiles.Include(p => p.ProfilePicture).FirstOrDefaultAsync(x => x.ProfilePictureId == profile.ProfilePictureId);
+                var thumb = pic.ProfilePicture.ThumbnailFilePath;
+                var picture = pic.ProfilePicture.FilePath;
+
+                ViewData["Name"] = profile.Name;
+                ViewData["Thumb"] = thumb.ToString();
+                ViewData["Picture"] = picture.ToString();
+            }
+            return View(user);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(User.Identity.Name);
+                var result =
+                    await UserManager.ChangePasswordAsync(user, viewModel.CurrentPassword, viewModel.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignOutAsync();
+                    return RedirectToAction("LogIn", "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Wrong login or password");
+                }
+
+            }
+            return View(viewModel);
         }
     }
 }

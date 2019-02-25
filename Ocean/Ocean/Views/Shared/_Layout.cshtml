@@ -45,9 +45,9 @@
                             <img src="~/images/Profile/icons8-anonymous-mask-48.png" class="bg-logo" />
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Manage profiles</a>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="ManageProfiles">Manage profiles</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">My account</a>
+                            <a class="dropdown-item" asp-controller="Account" asp-action="MyAccount">My account</a>
                             <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">Log out</a>
                         </div>
                     </div>

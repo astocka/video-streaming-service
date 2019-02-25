@@ -15,21 +15,25 @@
             <div class="card-body">
                 <h4 class="card-title">- Log In -</h4>
                 <form class="form-signin text-left" asp-action="Login" method="post">
-                    <div class="mb-2">
-                        <label asp-for="Login">UserName</label>
+                    <div class="mb-2 form-group">
+                        <label asp-for="Login">Login</label>
                         <input type="text" asp-for="Login" class="form-control" placeholder="Login">
+                        <span asp-validation-for="Login" class="text-danger"></span>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-2 form-group">
                         <label asp-for="Password">Password</label>
                         <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="checkbox mb-3">
+                        @*<label asp-for="RememberMe">Remember me</label>
+                        <input type="checkbox" asp-for="RememberMe" class="form-control">*@
                         <label>
-                            <input type="checkbox" value="remember-me"> Remember me
+                            <input asp-for="RememberMe" type="checkbox">Remember me
                         </label>
                     </div>
                     <div class="mb-2">
-                        <button class="btn btn-lg btn-info btn-block" type="submit">Log In</button>
+                        <button class="btn btn-lg btn-info btn-block" type="submit"><h5>Log In</h5></button>
                     </div>
                 </form>
                 <div class="text-center">
