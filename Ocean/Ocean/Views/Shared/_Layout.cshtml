@@ -31,7 +31,7 @@
                         <a class="nav-link" asp-controller="Video" asp-action="Index">Videos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Last Added</a>
+                        <a class="nav-link @ViewData["active-last-video"]" asp-controller="Video" asp-action="LastAdded">Last Added</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">My List</a>

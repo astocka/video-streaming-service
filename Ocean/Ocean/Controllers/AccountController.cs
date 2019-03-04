@@ -71,6 +71,14 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> UserRole()
+        {
+            var user = await UserManager.GetUserAsync(HttpContext.User);
+            await UserManager.AddToRoleAsync(user, "User");
+            return Content("done");
+        }
+
+        [HttpGet]
         public IActionResult Login()
         {
             return View();

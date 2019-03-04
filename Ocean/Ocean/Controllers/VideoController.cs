@@ -23,5 +23,13 @@ namespace Ocean.Controllers
             ViewData["active-video"] = "active";
             return View(await Context.Videos.ToListAsync());
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> LastAdded()
+        {
+            ViewData["active-last-video"] = "active";
+            return View(await Context.Videos.Where(x => x.DateAdded > DateTime.Now.Date.AddDays(-7)).ToListAsync());
+        }
     }
 }
