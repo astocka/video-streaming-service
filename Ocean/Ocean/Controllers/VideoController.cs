@@ -2,29 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ocean.Context;
-using Ocean.Models;
 
 namespace Ocean.Controllers
 {
-    public class HomeController : Controller
+    public class VideoController : Controller
     {
         protected OceanDbContext Context { get; }
 
-        public HomeController(OceanDbContext context)
+        public VideoController(OceanDbContext context)
         {
             Context = context;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["active-home"] = "active";
-            return View();
+            ViewData["active-video"] = "active";
+            return View(await Context.Videos.ToListAsync());
         }
-
     }
 }

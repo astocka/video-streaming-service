@@ -1,0 +1,19 @@
+﻿@model List<Ocean.Models.Video>
+
+@{
+    ViewData["Title"] = "Videos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="display-4">@ViewData["Title"]</div>
+    <hr class="my-4">
+    @foreach (var video in Model)
+    {
+        <div class="card text-white bg-success col-sm-2">
+                <img src="~/images/Videos/robert-bye-55418-unsplash.jpg" class="img-fluid img-thumbnail rounded mt-2" />
+            <h4 class="card-title mt-1">@video.Title | @video.YearReleased</h4>
+        </div>
+    }
+
+</div>
