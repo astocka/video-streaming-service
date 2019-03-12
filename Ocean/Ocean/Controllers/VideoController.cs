@@ -31,5 +31,28 @@ namespace Ocean.Controllers
             ViewData["active-last-video"] = "active";
             return View(await Context.Videos.Where(x => x.DateAdded > DateTime.Now.Date.AddDays(-7)).ToListAsync());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> VideoDetails(int? id)
+        {
+            ViewData["active-video-details"] = "active";
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var videoDetails =
+            await Context.Videos.Include(av => av.ActorVideo).ThenInclude(a => a.Actors).FirstOrDefaultAsync(x => x.VideoId == id);
+
+            await Context.Videos.Include(ac => ac.CategoryVideo).ThenInclude(c => c.Category)
+                .FirstOrDefaultAsync(x => x.VideoId == id);
+
+            if (videoDetails == null)
+            {
+                return NotFound();
+            }
+            return View(videoDetails);
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<Ocean.Models.Video>
+﻿@model System.Collections.Generic.List<Ocean.Models.Video>
 
 @{
     ViewData["Title"] = "Videos";
@@ -12,10 +12,10 @@
         @foreach (var video in Model)
         {
 
-            <div class="card text-white bg-success col-sm-2 float-left mr-3 mt-3">
+            <div class="card text-white bg-dark col-sm-2 float-left mr-3 mt-3">
                 <img src="~/images/Videos/robert-bye-55418-unsplash.jpg" class="img-fluid img-thumbnail rounded mt-2" />
-                <h5 class="card-title mt-1">@video.Title</h5>
+                <a class="text-light mt-1 h3" href="~/Video/VideoDetails/@video.VideoId">@video.Title</a>
             </div>
         }
     </div>
-    </div>
+</div>
