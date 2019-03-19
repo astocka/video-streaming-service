@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Ocean.Context;
 using Ocean.Models;
@@ -49,7 +50,7 @@ namespace Ocean.Controllers
                             Name = signUpViewModel.Login,
                             AppUserId = 1,
                             ProfilePictureId = 1
-                        } 
+                        }
                     }
                 };
                 var result = await UserManager.CreateAsync(user, signUpViewModel.Password);
@@ -112,9 +113,11 @@ namespace Ocean.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult ManageProfiles()
+        public async Task<IActionResult> ManageProfiles()
         {
-            return View();
+            var user = await UserManager.GetUserAsync(HttpContext.User);
+            var userProfiles = await Context.UserProfiles.Where(a => a.AppUserId == user.Id).Include(p => p.ProfilePicture).ToListAsync();
+            return View(userProfiles);
         }
 
         [HttpGet]
@@ -163,6 +166,75 @@ namespace Ocean.Controllers
 
             }
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> CreateProfile()
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            var userProfiles = await Context.UserProfiles.Where(a => a.AppUserId == user.Id).Include(p => p.ProfilePicture).ToListAsync();
+            ViewData["user-id"] = user.Id;
+            ViewBag.DefaultImage = "~/images/Profile/images/Profile/icons8-anonymous-mask-96.png";
+
+            if (userProfiles.Count == 3)
+            {
+                ViewData["max-profiles"] = "You can create up to three profiles for one account.";
+                return View();
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProfile(CreateProfileViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(User.Identity.Name);
+                await Context.UserProfiles.ToListAsync();
+                var newProfile = new UserProfile()
+                {
+                    Name = viewModel.Name,
+                    AppUserId = viewModel.AppUserId,
+                    ProfilePictureId = 1
+                };
+                Context.Add(newProfile);
+
+                user.MyProfiles.Add(newProfile);
+                    
+                var result = Context.SaveChanges();
+                if (result == 1)
+                {
+                    return RedirectToAction("ManageProfiles", "Account");
+                }
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SelectProfile()
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            var profiles = await Context.UserProfiles.Where(p => p.AppUserId == user.Id).ToListAsync();
+            await Context.ProfilePictures.ToListAsync();
+            return View(profiles);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SelectProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var activeProfile = await Context.UserProfiles.FirstOrDefaultAsync(i => i.UserProfileId == id);
+            return Content($"User: {HttpContext.User.Identity.Name}, Profile: {activeProfile.Name}");
         }
     }
 }

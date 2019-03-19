@@ -1,7 +1,7 @@
 ﻿@model List<Ocean.Models.UserProfile>
 
 @{
-    ViewData["Title"] = "Manage profiles";
+    ViewData["Title"] = "Select profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,11 +14,11 @@
             <div class="col-lg-2 col-md-3 col-sm-1">
                 <div class="card text-white bg-secondary text-center">
                     <div class="card-body">
-                        <img src="~/@profile.ProfilePicture.FilePath" width="150" height="150" />
-                        <h4 class="card-title">@profile.Name</h4>
-                    </div>
-                    <hr />
-                    <div class="mb-3"><a class="btn btn-info" href="#">Edit profile</a></div>
+                            <img src="~/@profile.ProfilePicture.FilePath" width="150" height="150" />
+                        <form class="form-signin text-center" asp-controller="Account" asp-action="SelectProfile" asp-route-id="@profile.UserProfileId" method="post">
+                            <button class="btn btn-success mt-3" type="submit">@profile.Name</button>
+                        </form>
+                        </div>
                 </div>
             </div>
         }
@@ -28,7 +28,7 @@
         }
     </div>
 
-    <div class="btn-group">
-        <a class="btn btn-success" asp-controller="Video" asp-action="Index">DONE</a>
+    <div class="btn-group text-center">
+        <a class="btn btn-info" asp-controller="Account" asp-action="ManageProfiles">Manage Profiles</a>
     </div>
 </div>

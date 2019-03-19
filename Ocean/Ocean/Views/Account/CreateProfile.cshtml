@@ -1,0 +1,37 @@
+﻿@model Ocean.ViewModels.CreateProfileViewModel
+
+@{
+    ViewData["Title"] = "Create Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-sm-2 col-lg-3">
+        <div class="card border-light mb-2">
+            <div class="card-header bg-light">
+                <div class="display-4 text-dark text-center">Add profile</div>
+            </div>
+            <div class="card-body">
+                <form class="form-signin text-left" asp-action="CreateProfile" method="post">
+                    <div class="mb-2 form-group text-center">
+                        <label asp-for="ProfilePictureId"><img src="~/images/Profile/icons8-anonymous-mask-96.png" width="150" height="150" /></label>
+                        <input type="hidden" asp-for="ProfilePictureId" value="1">
+                    </div>
+                    <div class="mb-2 form-group">
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Your Name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <input type="hidden" asp-for="AppUserId" value="@ViewData["user-id"]">
+                    </div>
+
+                    <div class="mt-2">
+                        <button class="btn btn-info btn-block" type="submit">Create</button>
+                        <a class="btn btn-dark btn-block" asp-controller="Account" asp-action="ManageProfiles">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
