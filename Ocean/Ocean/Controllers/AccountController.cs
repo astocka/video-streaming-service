@@ -233,8 +233,29 @@ namespace Ocean.Controllers
                 return NotFound();
             }
 
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            var allProfiles = await Context.UserProfiles.Where(u => u.AppUserId == user.Id).ToListAsync();
             var activeProfile = await Context.UserProfiles.FirstOrDefaultAsync(i => i.UserProfileId == id);
-            return Content($"User: {HttpContext.User.Identity.Name}, Profile: {activeProfile.Name}");
+
+            foreach (var profile in allProfiles)
+            {
+                profile.IsActive = false;
+            }
+
+            activeProfile.IsActive = true;
+
+            foreach (var userProfile in allProfiles)
+            {
+                Context.Update(userProfile);
+            }
+            Context.Update(activeProfile);
+            var result = Context.SaveChanges();
+            if (result == 1)
+            {
+                return RedirectToAction("Index", "Video");
+            }
+            return RedirectToAction("SelectProfile", "Account");
         }
 
         [HttpGet]

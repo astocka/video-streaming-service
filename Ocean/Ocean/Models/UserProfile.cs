@@ -13,6 +13,7 @@ namespace Ocean.Models
         public string Name { get; set; }
         public int AppUserId { get; set; }
         public int ProfilePictureId { get; set; }
+        public bool? IsActive { get; set; }
 
         public AppUser AppUser { get; set; }
         public ProfilePicture ProfilePicture { get; set; }

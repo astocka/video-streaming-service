@@ -264,6 +264,8 @@ namespace Ocean.Migrations
 
                     b.Property<int>("AppUserId");
 
+                    b.Property<bool?>("IsActive");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
