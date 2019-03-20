@@ -22,7 +22,7 @@
                             }
                         </div>
                     </div>
-                  
+
                     <div class="mb-2 form-group">
                         <input type="text" asp-for="Name" class="form-control" placeholder="Your Name">
                         <span asp-validation-for="Name" class="text-danger"></span>
@@ -34,12 +34,18 @@
                     <div class="mb-2 form-group">
                         <input type="hidden" asp-for="UserProfileId" value="@ViewBag.UserProfileId">
                     </div>
-                    
+
                     <div class="mt-2">
                         <button class="btn btn-info btn-block" type="submit">Edit</button>
                         <a class="btn btn-dark btn-block" asp-controller="Account" asp-action="ManageProfiles">Cancel</a>
                     </div>
                 </form>
+                @if (@ViewBag.UserProfilesCount > 0 && @ViewBag.UserProfilesCount < 4)
+                {
+                    <div class="mt-2 form-group">
+                        <a href="~/Account/DeleteProfile/@ViewData["user-id"]" class="btn btn-danger btn-block">Delete</a>
+                    </div>
+                }
             </div>
         </div>
     </div>

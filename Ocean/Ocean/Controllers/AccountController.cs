@@ -13,6 +13,7 @@ using Ocean.ViewModels;
 
 namespace Ocean.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         protected UserManager<AppUser> UserManager { get; }
@@ -29,12 +30,14 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult SignUp()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp(SignUpViewModel signUpViewModel)
         {
             if (ModelState.IsValid)
@@ -80,12 +83,14 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid)
@@ -112,7 +117,6 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> ManageProfiles()
         {
             var user = await UserManager.GetUserAsync(HttpContext.User);
@@ -121,7 +125,6 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> MyAccount()
         {
             var user = await UserManager.GetUserAsync(HttpContext.User);
@@ -169,7 +172,6 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> CreateProfile()
         {
             var user = await UserManager.FindByNameAsync(User.Identity.Name);
@@ -202,7 +204,7 @@ namespace Ocean.Controllers
                 Context.Add(newProfile);
 
                 user.MyProfiles.Add(newProfile);
-                    
+
                 var result = Context.SaveChanges();
                 if (result == 1)
                 {
@@ -214,7 +216,6 @@ namespace Ocean.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> SelectProfile()
         {
             var user = await UserManager.FindByNameAsync(User.Identity.Name);
@@ -225,7 +226,6 @@ namespace Ocean.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> SelectProfile(int? id)
         {
             if (id == null)
@@ -249,7 +249,7 @@ namespace Ocean.Controllers
             ViewBag.UserProfileId = id;
 
             ViewBag.Pictures = await Context.ProfilePictures.ToListAsync();
-            ViewBag.EditPicture = Context.ProfilePictures.AsEnumerable().Select(p => new SelectListItem { Text = p.ProfilePictureId.ToString(), Value = p.ProfilePictureId.ToString() });
+            ViewBag.UserProfilesCount = Context.UserProfiles.Count(p => p.AppUserId == id);
 
             var userProfile = await Context.UserProfiles.FirstOrDefaultAsync(u => u.UserProfileId == id);
             return View(userProfile);
@@ -265,7 +265,7 @@ namespace Ocean.Controllers
                 profile.Name = userProfile.Name;
                 profile.AppUserId = userProfile.AppUserId;
                 profile.ProfilePictureId = userProfile.ProfilePictureId;
-                
+
                 Context.Update(profile);
 
                 var result = Context.SaveChanges();
@@ -276,6 +276,37 @@ namespace Ocean.Controllers
             }
 
             return View(userProfile);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var profile = await Context.UserProfiles.Include(pic => pic.ProfilePicture).FirstOrDefaultAsync(p => p.UserProfileId == id);
+            return View(profile);
+        }
+
+        [HttpPost]
+        [Route("Account/DeleteConfirmProfile/{id}")]
+        public async Task<IActionResult> ConfirmDeleteProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var profile = await Context.UserProfiles.FirstOrDefaultAsync(p => p.UserProfileId == id);
+
+            Context.Remove(profile);
+            var result = Context.SaveChanges();
+            if (result == 1)
+            {
+                return RedirectToAction("ManageProfiles", "Account");
+            }
+
+            return RedirectToAction("DeleteProfile", "Account");
         }
     }
 }
