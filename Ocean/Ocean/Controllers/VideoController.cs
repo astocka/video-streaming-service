@@ -49,6 +49,16 @@ namespace Ocean.Controllers
             await Context.Videos.Include(ac => ac.CategoryVideo).ThenInclude(c => c.Category)
                 .FirstOrDefaultAsync(x => x.VideoId == id);
 
+            var userProfileVideo = await Context.UserProfileVideos.FirstOrDefaultAsync(v => v.VideoId == id);
+            if (userProfileVideo != null)
+            {
+                ViewBag.IsOnList = true;
+            }
+            else
+            {
+                ViewBag.IsOnList = false;
+            }
+
             if (videoDetails == null)
             {
                 return NotFound();
@@ -84,7 +94,27 @@ namespace Ocean.Controllers
                 return RedirectToAction("Index", "Video");
             }
 
-            return Content("something went wrong..");
+            return RedirectToAction("VideoDetails", "Video", new { id = video.VideoId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyList()
+        {
+            ViewData["active-my-list"] = "active";
+
+            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo).FirstOrDefaultAsync(a => a.IsActive == true);
+
+            var userVideos = await Context.UserProfileVideos.Where(u => u.UserProfileId == activeProfile.UserProfileId)
+                .ToListAsync();
+            await Context.Videos.Include(c => c.CategoryVideo).ToListAsync();
+            await Context.Videos.Include(a => a.ActorVideo).ToListAsync();
+
+            if (activeProfile == null || userVideos == null)
+            {
+                return NotFound();
+            }
+
+            return View(userVideos);
         }
     }
 }

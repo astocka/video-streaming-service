@@ -21,12 +21,15 @@
                 <p>
                     @Model.Description
                 </p>
-                <div class="btn-group">
-                    <form asp-controller="Video" asp-action="AddToMyList" asp-route-id="@Model.VideoId" method="post">
-                        <button type="submit" class="btn btn-info">Add to my list</button>
-                    </form>
-                    @*<a class="btn btn-info" href="~/Video/AddToMyList/@Model.VideoId">Add to my list</a>*@
-                </div>
+                @if (@ViewBag.IsOnList == false)
+                {
+                    <div class="btn-group">
+                        <form asp-controller="Video" asp-action="AddToMyList" asp-route-id="@Model.VideoId" method="post">
+                            <button type="submit" class="btn btn-info">Add to my list</button>
+                        </form>
+                    </div>
+                }
+               
                 <div class="btn-group">
                     <a href="#"><img src="~/images/icons8-green-check-mark-48.png"/></a>
                     <a href="#"><img src="~/images/icons8-delete-48.png"/></a>

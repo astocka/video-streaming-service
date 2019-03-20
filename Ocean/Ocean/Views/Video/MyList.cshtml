@@ -1,0 +1,20 @@
+﻿@model System.Collections.Generic.List<Ocean.Models.UserProfileVideo>
+
+@{
+    ViewData["Title"] = "My List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <div class="display-4">@ViewData["Title"]</div>
+    <hr class="my-4">
+    <div class="col-sm-12 col-lg-12">
+        @foreach (var video in Model)
+        {
+            <div class="card text-white bg-dark col-sm-2 float-left mr-3 mt-3">
+                <img src="~/images/Videos/robert-bye-55418-unsplash.jpg" class="img-fluid img-thumbnail rounded mt-2" />
+                <a class="text-light mt-1 h3" href="~/Video/VideoDetails/@video.VideoId">@video.Video.Title</a>
+            </div>
+        }
+    </div>
+</div>
