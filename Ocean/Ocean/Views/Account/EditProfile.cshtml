@@ -1,0 +1,46 @@
+﻿@model Ocean.Models.UserProfile
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-sm-2 col-md-2 col-lg-4">
+        <div class="card border-light mb-2">
+            <div class="card-header bg-light">
+                <div class="display-4 text-dark text-center">Edit profile</div>
+            </div>
+            <div class="card-body">
+                <form class="form-signin text-left" asp-controller="Account" asp-action="EditProfile" asp-route-id="@ViewBag.UserProfileId" method="post">
+                    <div class="form-check">
+                        <div class="mt-3 mb-3 text-center">
+                            @foreach (var picture in @ViewBag.Pictures)
+                            {
+                                <img class="ml-1 mr-1" src="~/@picture.FilePath" height="100" width="100" />
+                                <input class="form-check-input" type="radio" asp-for="ProfilePictureId" value="@picture.ProfilePictureId">
+                            }
+                        </div>
+                    </div>
+                  
+                    <div class="mb-2 form-group">
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Your Name">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-2 form-group">
+                        <input type="hidden" asp-for="AppUserId" value="@ViewData["user-id"]">
+                    </div>
+                    <div class="mb-2 form-group">
+                        <input type="hidden" asp-for="UserProfileId" value="@ViewBag.UserProfileId">
+                    </div>
+                    
+                    <div class="mt-2">
+                        <button class="btn btn-info btn-block" type="submit">Edit</button>
+                        <a class="btn btn-dark btn-block" asp-controller="Account" asp-action="ManageProfiles">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

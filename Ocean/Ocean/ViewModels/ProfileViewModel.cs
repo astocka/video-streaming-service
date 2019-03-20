@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Ocean.ViewModels
 {
-    public class CreateProfileViewModel
+    public class ProfileViewModel
     {
         [Required]
         public string Name { get; set; }
-        [DisplayName("Profile Image")]
+        [DisplayName("")]
         public int ProfilePictureId { get; set; }
+        [DisplayName("")]
         public int AppUserId { get; set; }
     }
 }

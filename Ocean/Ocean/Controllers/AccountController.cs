@@ -187,7 +187,7 @@ namespace Ocean.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProfile(CreateProfileViewModel viewModel)
+        public async Task<IActionResult> CreateProfile(ProfileViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -235,6 +235,47 @@ namespace Ocean.Controllers
 
             var activeProfile = await Context.UserProfiles.FirstOrDefaultAsync(i => i.UserProfileId == id);
             return Content($"User: {HttpContext.User.Identity.Name}, Profile: {activeProfile.Name}");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            ViewData["user-id"] = user.Id;
+            ViewBag.UserProfileId = id;
+
+            ViewBag.Pictures = await Context.ProfilePictures.ToListAsync();
+            ViewBag.EditPicture = Context.ProfilePictures.AsEnumerable().Select(p => new SelectListItem { Text = p.ProfilePictureId.ToString(), Value = p.ProfilePictureId.ToString() });
+
+            var userProfile = await Context.UserProfiles.FirstOrDefaultAsync(u => u.UserProfileId == id);
+            return View(userProfile);
+        }
+
+        [HttpPost]
+        [Route("Account/EditProfile/{id}")]
+        public async Task<IActionResult> EditProfile(int? id, [Bind("UserProfileId, AppUserId, Name, ProfilePictureId")]UserProfile userProfile)
+        {
+            if (ModelState.IsValid && id != null)
+            {
+                var profile = await Context.UserProfiles.FirstOrDefaultAsync(p => p.UserProfileId == id);
+                profile.Name = userProfile.Name;
+                profile.AppUserId = userProfile.AppUserId;
+                profile.ProfilePictureId = userProfile.ProfilePictureId;
+                
+                Context.Update(profile);
+
+                var result = Context.SaveChanges();
+                if (result == 1)
+                {
+                    return RedirectToAction("ManageProfiles", "Account");
+                }
+            }
+
+            return View(userProfile);
         }
     }
 }
