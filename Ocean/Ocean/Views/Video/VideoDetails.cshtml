@@ -22,7 +22,10 @@
                     @Model.Description
                 </p>
                 <div class="btn-group">
-                    <button class="btn btn-info">Add to my list</button>
+                    <form asp-controller="Video" asp-action="AddToMyList" asp-route-id="@Model.VideoId" method="post">
+                        <button type="submit" class="btn btn-info">Add to my list</button>
+                    </form>
+                    @*<a class="btn btn-info" href="~/Video/AddToMyList/@Model.VideoId">Add to my list</a>*@
                 </div>
                 <div class="btn-group">
                     <a href="#"><img src="~/images/icons8-green-check-mark-48.png"/></a>

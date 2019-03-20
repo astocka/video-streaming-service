@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ocean.Context;
+using Ocean.Models;
 
 namespace Ocean.Controllers
 {
@@ -53,6 +54,37 @@ namespace Ocean.Controllers
                 return NotFound();
             }
             return View(videoDetails);
+        }
+
+        [HttpPost]
+        [Route("Video/AddToMyList/{id}")]
+        public async Task<IActionResult> AddToMyList(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var video = await Context.Videos.FirstOrDefaultAsync(v => v.VideoId == id);
+            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo).FirstOrDefaultAsync(a => a.IsActive == true);
+
+            var userProfileVideo = new UserProfileVideo
+            {
+                UserProfileId = activeProfile.UserProfileId,
+                VideoId = video.VideoId,
+                Video = video,
+                UserProfile = activeProfile
+            };
+
+            Context.Add(userProfileVideo);
+            var result = Context.SaveChanges();
+
+            if (result == 1)
+            {
+                return RedirectToAction("Index", "Video");
+            }
+
+            return Content("something went wrong..");
         }
     }
 }

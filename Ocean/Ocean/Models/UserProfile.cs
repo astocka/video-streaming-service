@@ -18,5 +18,7 @@ namespace Ocean.Models
         public AppUser AppUser { get; set; }
         public ProfilePicture ProfilePicture { get; set; }
 
+        public List<UserProfileVideo> UserProfileVideo { get; set; }
+
     }
 }

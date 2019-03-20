@@ -24,5 +24,6 @@ namespace Ocean.Context
         public DbSet<CategoryVideo> CategoryVideos { get; set; }
         public DbSet<Actor> Actors { get; set; }
         public DbSet<ActorVideo> ActorVideos { get; set; }
+        public DbSet<UserProfileVideo> UserProfileVideos { get; set; }
     }
 }

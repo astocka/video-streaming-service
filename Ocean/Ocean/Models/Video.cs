@@ -20,5 +20,7 @@ namespace Ocean.Models
 
         public List<CategoryVideo> CategoryVideo { get; set; }
         public List<ActorVideo> ActorVideo { get; set; }
+
+        public List<UserProfileVideo> UserProfileVideo { get; set; }
     }
 }

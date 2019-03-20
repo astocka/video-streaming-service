@@ -280,6 +280,24 @@ namespace Ocean.Migrations
                     b.ToTable("UserProfiles");
                 });
 
+            modelBuilder.Entity("Ocean.Models.UserProfileVideo", b =>
+                {
+                    b.Property<int>("UserProfileVideoId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("UserProfileId");
+
+                    b.Property<int>("VideoId");
+
+                    b.HasKey("UserProfileVideoId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("UserProfileVideos");
+                });
+
             modelBuilder.Entity("Ocean.Models.Video", b =>
                 {
                     b.Property<int>("VideoId")
@@ -384,6 +402,19 @@ namespace Ocean.Migrations
                     b.HasOne("Ocean.Models.ProfilePicture", "ProfilePicture")
                         .WithMany("UserProfiles")
                         .HasForeignKey("ProfilePictureId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.UserProfileVideo", b =>
+                {
+                    b.HasOne("Ocean.Models.UserProfile", "UserProfile")
+                        .WithMany("UserProfileVideo")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Video")
+                        .WithMany("UserProfileVideo")
+                        .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
