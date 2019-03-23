@@ -44,7 +44,8 @@ namespace Ocean.Controllers
             }
 
             var videoDetails =
-            await Context.Videos.Include(av => av.ActorVideo).ThenInclude(a => a.Actors).FirstOrDefaultAsync(x => x.VideoId == id);
+                await Context.Videos.Include(av => av.ActorVideo).ThenInclude(a => a.Actors)
+                    .FirstOrDefaultAsync(x => x.VideoId == id);
 
             await Context.Videos.Include(ac => ac.CategoryVideo).ThenInclude(c => c.Category)
                 .FirstOrDefaultAsync(x => x.VideoId == id);
@@ -63,6 +64,7 @@ namespace Ocean.Controllers
             {
                 return NotFound();
             }
+
             return View(videoDetails);
         }
 
@@ -76,7 +78,8 @@ namespace Ocean.Controllers
             }
 
             var video = await Context.Videos.FirstOrDefaultAsync(v => v.VideoId == id);
-            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo).FirstOrDefaultAsync(a => a.IsActive == true);
+            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo)
+                .FirstOrDefaultAsync(a => a.IsActive == true);
 
             var userProfileVideo = new UserProfileVideo
             {
@@ -102,7 +105,8 @@ namespace Ocean.Controllers
         {
             ViewData["active-my-list"] = "active";
 
-            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo).FirstOrDefaultAsync(a => a.IsActive == true);
+            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo)
+                .FirstOrDefaultAsync(a => a.IsActive == true);
 
             var userVideos = await Context.UserProfileVideos.Where(u => u.UserProfileId == activeProfile.UserProfileId)
                 .ToListAsync();
@@ -115,6 +119,53 @@ namespace Ocean.Controllers
             }
 
             return View(userVideos);
+        }
+
+        [HttpPost]
+        [Route("Video/AddVideoRating/{id?}")]
+        public async Task<IActionResult> AddVideoRating(int? id, [Bind("VideoId")] Video video)
+        {
+            if (id == null || video == null)
+            {
+                return NotFound();
+            }
+
+            var activeProfile = await Context.UserProfiles.Include(uv => uv.UserProfileVideo)
+                .FirstOrDefaultAsync(a => a.IsActive == true);
+            var videoToRate = await Context.Videos.FirstOrDefaultAsync(v => v.VideoId == video.VideoId);
+
+
+            var rating = new Rating
+            {
+                Rate = Rate.Unrated,
+                UserProfileId = activeProfile.UserProfileId,
+                UserProfile = activeProfile
+            };
+
+            switch (id)
+            {
+                case (int)Rate.Like:
+                    rating.Rate = Rate.Like;
+                    break;
+                case (int)Rate.DontLike:
+                    rating.Rate = Rate.DontLike;
+                    break;
+            }
+
+            Context.Add(rating);
+
+            var videoRating = new VideoRating
+            {
+                VideoId = videoToRate.VideoId,
+                Video = videoToRate,
+                RatingId = rating.RatingId,
+                Rating = rating
+            };
+
+            Context.Add(videoRating);
+            Context.SaveChanges();
+
+            return RedirectToAction("Index", "Video", new { id = video.VideoId });
         }
     }
 }

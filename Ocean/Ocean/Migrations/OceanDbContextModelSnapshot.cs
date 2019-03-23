@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Ocean.Context;
+using Ocean.Models;
 using System;
 
 namespace Ocean.Migrations
@@ -257,6 +258,22 @@ namespace Ocean.Migrations
                     b.ToTable("ProfilePictures");
                 });
 
+            modelBuilder.Entity("Ocean.Models.Rating", b =>
+                {
+                    b.Property<int>("RatingId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Rate");
+
+                    b.Property<int>("UserProfileId");
+
+                    b.HasKey("RatingId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("Ocean.Models.UserProfile", b =>
                 {
                     b.Property<int>("UserProfileId")
@@ -319,6 +336,24 @@ namespace Ocean.Migrations
                     b.HasKey("VideoId");
 
                     b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("Ocean.Models.VideoRating", b =>
+                {
+                    b.Property<int>("VideoRatingId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("RatingId");
+
+                    b.Property<int>("VideoId");
+
+                    b.HasKey("VideoRatingId");
+
+                    b.HasIndex("RatingId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("VideoRatings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -392,6 +427,14 @@ namespace Ocean.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Ocean.Models.Rating", b =>
+                {
+                    b.HasOne("Ocean.Models.UserProfile", "UserProfile")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Ocean.Models.UserProfile", b =>
                 {
                     b.HasOne("Ocean.Models.AppUser", "AppUser")
@@ -414,6 +457,19 @@ namespace Ocean.Migrations
 
                     b.HasOne("Ocean.Models.Video", "Video")
                         .WithMany("UserProfileVideo")
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.VideoRating", b =>
+                {
+                    b.HasOne("Ocean.Models.Rating", "Rating")
+                        .WithMany("VideoRating")
+                        .HasForeignKey("RatingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Video")
+                        .WithMany("VideoRating")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

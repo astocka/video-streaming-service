@@ -250,12 +250,9 @@ namespace Ocean.Controllers
                 Context.Update(userProfile);
             }
             Context.Update(activeProfile);
-            var result = Context.SaveChanges();
-            if (result == 1)
-            {
-                return RedirectToAction("Index", "Video");
-            }
-            return RedirectToAction("SelectProfile", "Account");
+            Context.SaveChanges();
+
+            return RedirectToAction("Index", "Video");
         }
 
         [HttpGet]
