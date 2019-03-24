@@ -134,8 +134,10 @@ namespace Ocean.Controllers
                 var pic = await Context.UserProfiles.Include(p => p.ProfilePicture).FirstOrDefaultAsync(x => x.ProfilePictureId == profile.ProfilePictureId);
                 var thumb = pic.ProfilePicture.ThumbnailFilePath;
                 var picture = pic.ProfilePicture.FilePath;
+                var activeProfile = await Context.UserProfiles.FirstOrDefaultAsync(a => a.IsActive == true);
 
                 ViewData["Name"] = profile.Name;
+                ViewData["ActiveProfile"] = activeProfile.Name;
                 ViewData["Thumb"] = thumb.ToString();
                 ViewData["Picture"] = picture.ToString();
             }
