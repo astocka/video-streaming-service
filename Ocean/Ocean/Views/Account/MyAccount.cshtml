@@ -31,7 +31,7 @@
             <img src="../@ViewData["Picture"].ToString()"  /> <span class="h3">@ViewData["ActiveProfile"]</span>
             <ul class="list-unstyled h4 mt-3">
                 <li><a href="#">My activity</a></li>
-                <li><a href="#">My ratings</a></li>
+                <li><a asp-controller="Account" asp-action="ProfileRatings" asp-route-id="@ViewData["ActiveProfileId"]">My ratings</a></li>
                 <li class="mt-3"><a class="btn btn-info btn-lg" asp-controller="Account" asp-action="ManageProfiles" role="button">Manage profiles</a></li>
             </ul>
         </div>

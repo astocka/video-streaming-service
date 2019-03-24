@@ -11,12 +11,14 @@ namespace Ocean.Models
     {
         public int RatingId { get; set; }
         public Rate Rate { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public int UserProfileId { get; set; }
         [ForeignKey("UserProfileId")]
         public UserProfile UserProfile { get; set; }
 
-        public List<VideoRating> VideoRating { get; set; }
-        
+        public int VideoId { get; set; }
+        [ForeignKey("VideoId")]
+        public Video Video { get; set; }
     }
 }

@@ -1,0 +1,43 @@
+﻿@using Ocean.Models
+@model List<Ocean.Models.Rating>
+
+@{
+    ViewData["Title"] = "My Ratings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>My ratings</h1>
+    <hr />
+    <div class="col-lg-6 col-md-4 col-sm-2">
+        <table class="table table-secondary">
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Rating</th>
+            </tr>
+            @foreach (var rating in Model)
+            {
+                <tr>
+                    <td>@rating.DateAdded.ToString("yyyy-MM-dd")</td>
+                    <td><a href="~/Video/VideoDetails/@rating.VideoId">@rating.Video.Title</a></td>
+                    <td>
+                        @if (rating.Rate == Rate.Like)
+                        {
+                            <img src="~/images/icons8-green-check-mark-48.png"/>
+                        }
+                        @if (rating.Rate == Rate.DontLike)
+                        {
+                            <img src="~/images/icons8-delete-48.png"/>
+                        }
+                        @if (rating.Rate == Rate.Unrated)
+                        {
+                            <span>Unrated</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        <a class="btn btn-info" asp-controller="Account" asp-action="MyAccount">My account</a>
+    </div>
+</div>

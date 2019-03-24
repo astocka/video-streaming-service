@@ -138,6 +138,7 @@ namespace Ocean.Controllers
 
                 ViewData["Name"] = profile.Name;
                 ViewData["ActiveProfile"] = activeProfile.Name;
+                ViewData["ActiveProfileId"] = activeProfile.ProfilePictureId;
                 ViewData["Thumb"] = thumb.ToString();
                 ViewData["Picture"] = picture.ToString();
             }
@@ -327,6 +328,18 @@ namespace Ocean.Controllers
             }
 
             return RedirectToAction("DeleteProfile", "Account");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileRatings(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ratings = await Context.Ratings.Include(v => v.Video).Where(r => r.UserProfileId == id).ToListAsync();
+            return View(ratings);
         }
     }
 }

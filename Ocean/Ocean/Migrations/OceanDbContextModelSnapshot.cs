@@ -263,13 +263,19 @@ namespace Ocean.Migrations
                     b.Property<int>("RatingId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("DateAdded");
+
                     b.Property<int>("Rate");
 
                     b.Property<int>("UserProfileId");
 
+                    b.Property<int>("VideoId");
+
                     b.HasKey("RatingId");
 
                     b.HasIndex("UserProfileId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("Ratings");
                 });
@@ -336,24 +342,6 @@ namespace Ocean.Migrations
                     b.HasKey("VideoId");
 
                     b.ToTable("Videos");
-                });
-
-            modelBuilder.Entity("Ocean.Models.VideoRating", b =>
-                {
-                    b.Property<int>("VideoRatingId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("RatingId");
-
-                    b.Property<int>("VideoId");
-
-                    b.HasKey("VideoRatingId");
-
-                    b.HasIndex("RatingId");
-
-                    b.HasIndex("VideoId");
-
-                    b.ToTable("VideoRatings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -433,6 +421,11 @@ namespace Ocean.Migrations
                         .WithMany("Ratings")
                         .HasForeignKey("UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Video")
+                        .WithMany("Ratings")
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ocean.Models.UserProfile", b =>
@@ -457,19 +450,6 @@ namespace Ocean.Migrations
 
                     b.HasOne("Ocean.Models.Video", "Video")
                         .WithMany("UserProfileVideo")
-                        .HasForeignKey("VideoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ocean.Models.VideoRating", b =>
-                {
-                    b.HasOne("Ocean.Models.Rating", "Rating")
-                        .WithMany("VideoRating")
-                        .HasForeignKey("RatingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ocean.Models.Video", "Video")
-                        .WithMany("VideoRating")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

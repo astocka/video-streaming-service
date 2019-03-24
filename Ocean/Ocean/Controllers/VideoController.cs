@@ -139,7 +139,10 @@ namespace Ocean.Controllers
             {
                 Rate = Rate.Unrated,
                 UserProfileId = activeProfile.UserProfileId,
-                UserProfile = activeProfile
+                UserProfile = activeProfile,
+                DateAdded = DateTime.Now.Date,
+                VideoId = videoToRate.VideoId,
+                Video = videoToRate
             };
 
             switch (id)
@@ -153,16 +156,6 @@ namespace Ocean.Controllers
             }
 
             Context.Add(rating);
-
-            var videoRating = new VideoRating
-            {
-                VideoId = videoToRate.VideoId,
-                Video = videoToRate,
-                RatingId = rating.RatingId,
-                Rating = rating
-            };
-
-            Context.Add(videoRating);
             Context.SaveChanges();
 
             return RedirectToAction("Index", "Video", new { id = video.VideoId });
