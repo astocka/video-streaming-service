@@ -160,5 +160,28 @@ namespace Ocean.Controllers
 
             return RedirectToAction("Index", "Video", new { id = video.VideoId });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string search)
+        {
+            if (search == null)
+            {
+                return NotFound();
+            }
+
+            var videos = await Context.Videos.Include(c => c.ActorVideo).ThenInclude(a => a.Actors).ToListAsync();
+            var videoResult = videos.Where(t => t.Title.ToLower().Contains(search.ToLower().Trim())
+                                        || t.YearReleased.ToString().Contains(search.Trim())
+                                        || t.Description.ToLower().Contains(search.ToLower().Trim())
+                                        || t.ActorVideo.Count != 0
+                                        || t.CategoryVideo.Count != 0).ToList();
+
+            if (videoResult.Count == 0)
+            {
+                return NotFound();
+            }
+           
+            return View(videoResult);
+        }
     }
 }
