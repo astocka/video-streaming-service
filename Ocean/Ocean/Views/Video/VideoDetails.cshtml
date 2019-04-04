@@ -8,8 +8,8 @@
 <div class="jumbotron">
     <div class="row">
         <div class="col-lg-8 col-sm-8">
-            <video class="w-100 h-100 border-light border" controls>
-                <source src="../videos/TC.mp4" type="video/mp4">
+            <video class="video w-100 h-100 border-light border" controls>
+                <source src="../../videos/TC.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video> <br>
         </div>
@@ -29,17 +29,17 @@
                         </form>
                     </div>
                 }
-               
-                    <div class="btn-group">
-                        <form asp-controller="Video" asp-action="AddVideoRating" asp-route-id="1" method="post">
-                            <input type="hidden" asp-for="VideoId" value="@Model.VideoId" />
-                            <button type="submit" class="img-thumbnail"><img src="~/images/icons8-green-check-mark-48.png" /></button>
-                        </form>
-                        <form asp-controller="Video" asp-action="AddVideoRating" asp-route-id="2" method="post">
-                            <input type="hidden" asp-for="VideoId" value="@Model.VideoId" />
-                            <button type="submit" class="img-thumbnail"><img src="~/images/icons8-delete-48.png" /></button>
-                        </form>
-                    </div>
+
+                <div class="btn-group">
+                    <form asp-controller="Video" asp-action="AddVideoRating" asp-route-id="1" method="post">
+                        <input type="hidden" asp-for="VideoId" value="@Model.VideoId" />
+                        <button type="submit" class="img-thumbnail"><img src="~/images/icons8-green-check-mark-48.png" /></button>
+                    </form>
+                    <form asp-controller="Video" asp-action="AddVideoRating" asp-route-id="2" method="post">
+                        <input type="hidden" asp-for="VideoId" value="@Model.VideoId" />
+                        <button type="submit" class="img-thumbnail"><img src="~/images/icons8-delete-48.png" /></button>
+                    </form>
+                </div>
 
                 <div class="mt-2">
                     <strong>Cast:</strong>
@@ -76,3 +76,23 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var video = document.getElementsByClassName("video")[0];
+
+            video.onended = function() {
+                $.ajax({
+                    url: "/Account/ViewingActivity/@Model.VideoId",
+                    method: "POST",
+                    success: function(msg) {
+                        console.log("profile activity was successfully updated");
+                    },
+                    error: function(msg) {
+                        console.log("something went wrong with saving profile activity");
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,28 @@
+﻿@using Ocean.Models
+@model List<Ocean.Models.Viewing>
+
+@{
+    ViewData["Title"] = "My activity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>My activity</h1>
+    <hr />
+    <div class="col-lg-6 col-md-4 col-sm-2">
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                <th>Title</th>
+            </tr>
+            @foreach (var video in Model)
+            {
+                <tr>
+                    <td>@video.DateView.ToString("yyyy-MM-dd hh:mm:ss")</td>
+                    <td><a href="~/Video/VideoDetails/@video.VideoId">@video.Video.Title</a></td>
+                </tr>
+            }
+        </table>
+        <a class="btn btn-info" asp-controller="Account" asp-action="MyAccount">My account</a>
+    </div>
+</div>

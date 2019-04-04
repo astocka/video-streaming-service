@@ -22,5 +22,8 @@ namespace Ocean.Models
 
         public List<Rating> Ratings { get; set; }
 
+        public List<Viewing> Viewings { get; set; }
+
+
     }
 }

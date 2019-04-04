@@ -138,7 +138,8 @@ namespace Ocean.Controllers
 
                 ViewData["Name"] = profile.Name;
                 ViewData["ActiveProfile"] = activeProfile.Name;
-                ViewData["ActiveProfileId"] = activeProfile.ProfilePictureId;
+                //ViewData["ActiveProfileId"] = activeProfile.ProfilePictureId;
+                ViewData["ActiveProfileId"] = activeProfile.UserProfileId;
                 ViewData["Thumb"] = thumb.ToString();
                 ViewData["Picture"] = picture.ToString();
             }
@@ -340,6 +341,46 @@ namespace Ocean.Controllers
 
             var ratings = await Context.Ratings.Include(v => v.Video).Where(r => r.UserProfileId == id).ToListAsync();
             return View(ratings);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileActivity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var profileActivity = await Context.Viewings.Include(v => v.Video).Where(p => p.UserProfileId == id).ToListAsync();
+            return View(profileActivity);
+
+        }
+
+        [HttpPost]
+        [Route("/Account/ViewingActivity/{id?}")]
+        public async Task<IActionResult> ViewingActivity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var activeProfile = await Context.UserProfiles.FirstOrDefaultAsync(i => i.IsActive == true);
+            var video = await Context.Videos.FirstOrDefaultAsync(v => v.VideoId == id);
+
+            var profileActivity = new Viewing
+            {
+                DateView = DateTime.Now,
+                UserProfile = activeProfile,
+                UserProfileId = activeProfile.UserProfileId,
+                Video = video,
+                VideoId = video.VideoId
+            };
+
+            Context.Viewings.Add(profileActivity);
+            Context.SaveChanges();
+
+            return RedirectToAction("VideoDetails", "Video", new {id = video.VideoId});
         }
     }
 }

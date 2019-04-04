@@ -10,7 +10,7 @@
     <h1>My ratings</h1>
     <hr />
     <div class="col-lg-6 col-md-4 col-sm-2">
-        <table class="table table-secondary">
+        <table class="table">
             <tr>
                 <th>Date</th>
                 <th>Title</th>
@@ -19,7 +19,7 @@
             @foreach (var rating in Model)
             {
                 <tr>
-                    <td>@rating.DateAdded.ToString("yyyy-MM-dd")</td>
+                    <td>@rating.DateAdded.ToString("yyyy-MM-dd hh:mm:ss")</td>
                     <td><a href="~/Video/VideoDetails/@rating.VideoId">@rating.Video.Title</a></td>
                     <td>
                         @if (rating.Rate == Rate.Like)

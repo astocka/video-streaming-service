@@ -344,6 +344,26 @@ namespace Ocean.Migrations
                     b.ToTable("Videos");
                 });
 
+            modelBuilder.Entity("Ocean.Models.Viewing", b =>
+                {
+                    b.Property<int>("ViewingId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateView");
+
+                    b.Property<int>("UserProfileId");
+
+                    b.Property<int>("VideoId");
+
+                    b.HasKey("ViewingId");
+
+                    b.HasIndex("UserProfileId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("Viewings");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>")
@@ -450,6 +470,19 @@ namespace Ocean.Migrations
 
                     b.HasOne("Ocean.Models.Video", "Video")
                         .WithMany("UserProfileVideo")
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ocean.Models.Viewing", b =>
+                {
+                    b.HasOne("Ocean.Models.UserProfile", "UserProfile")
+                        .WithMany("Viewings")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ocean.Models.Video", "Video")
+                        .WithMany("Viewings")
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
