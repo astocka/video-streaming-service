@@ -166,22 +166,28 @@ namespace Ocean.Controllers
         {
             if (search == null)
             {
-                return NotFound();
+                return View("ResultNoneVideo");
             }
 
-            var videos = await Context.Videos.Include(c => c.ActorVideo).ThenInclude(a => a.Actors).ToListAsync();
-            var videoResult = videos.Where(t => t.Title.ToLower().Contains(search.ToLower().Trim())
-                                        || t.YearReleased.ToString().Contains(search.Trim())
-                                        || t.Description.ToLower().Contains(search.ToLower().Trim())
-                                        || t.ActorVideo.Count != 0
-                                        || t.CategoryVideo.Count != 0).ToList();
-
-            if (videoResult.Count == 0)
+            try
             {
-                return NotFound();
+                var videos = await Context.Videos.Include(c => c.ActorVideo).ThenInclude(a => a.Actors).ToListAsync();
+                var videoResult = videos.Where(t => t.Title.ToLower().Contains(search.ToLower().Trim())
+                                                    || t.YearReleased.ToString().Contains(search.Trim())
+                                                    || t.Description.ToLower().Contains(search.ToLower().Trim())
+                                                    || t.ActorVideo.Count != 0
+                                                    || t.CategoryVideo.Count != 0).ToList();
+
+                if (videoResult.Count == 0)
+                {
+                    return View("ResultNoneVideo");
+                }
+                return View(videoResult);
             }
-           
-            return View(videoResult);
+            catch (Exception)
+            {
+                return View("ResultNoneVideo");
+            }
         }
     }
 }

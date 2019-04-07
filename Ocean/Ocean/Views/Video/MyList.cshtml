@@ -11,9 +11,8 @@
     <div class="col-sm-12 col-lg-12">
         @foreach (var video in Model)
         {
-            <div class="card text-white bg-dark col-sm-2 float-left mr-3 mt-3">
-                <img src="~/images/Videos/robert-bye-55418-unsplash.jpg" class="img-fluid img-thumbnail rounded mt-2" />
-                <a class="text-light mt-1 h3" href="~/Video/VideoDetails/@video.VideoId">@video.Video.Title</a>
+            <div class="col-sm-2 float-left">
+                <a class="text-light mt-1 h3" href="~/Video/VideoDetails/@video.VideoId"><img src="~/images/Videos/robert-bye-55418-unsplash.jpg" class="img-fluid img-thumbnail rounded mt-2" /></a>
             </div>
         }
     </div>
